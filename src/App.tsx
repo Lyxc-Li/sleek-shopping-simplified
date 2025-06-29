@@ -10,7 +10,7 @@ import ProductsPage from "./pages/ProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CartPage from "./pages/CartPage";
 import NotFound from "./pages/NotFound";
-import { Product } from "./components/ProductCard";
+import { Product } from "./services/products";
 import { CartItem } from "./components/Cart";
 import { useToast } from "@/hooks/use-toast";
 
@@ -32,8 +32,8 @@ const App = () => {
         );
         
         toast({
-          title: "Cart Updated",
-          description: `${product.name} quantity increased to ${existingItem.quantity + 1}`,
+          title: "Warenkorb aktualisiert",
+          description: `${product.name} Menge erhöht auf ${existingItem.quantity + 1}`,
         });
         
         return updatedItems;
@@ -48,8 +48,8 @@ const App = () => {
         };
         
         toast({
-          title: "Added to Cart",
-          description: `${product.name} has been added to your cart`,
+          title: "Zum Warenkorb hinzugefügt",
+          description: `${product.name} wurde zum Warenkorb hinzugefügt`,
         });
         
         return [...prevItems, newItem];
@@ -75,8 +75,8 @@ const App = () => {
       const item = prevItems.find(item => item.id === id);
       if (item) {
         toast({
-          title: "Removed from Cart",
-          description: `${item.name} has been removed from your cart`,
+          title: "Aus Warenkorb entfernt",
+          description: `${item.name} wurde aus dem Warenkorb entfernt`,
         });
       }
       return prevItems.filter(item => item.id !== id);

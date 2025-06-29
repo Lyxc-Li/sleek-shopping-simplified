@@ -5,20 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Star, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  category: string;
-  rating: number;
-  reviewCount: number;
-  inStock: boolean;
-  isNew?: boolean;
-  isBestseller?: boolean;
-}
+import { Product } from '@/services/products';
 
 interface ProductCardProps {
   product: Product;
@@ -45,7 +32,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {product.isNew && (
             <Badge className="bg-green-500 hover:bg-green-500 text-white">
-              New
+              Neu
             </Badge>
           )}
           {product.isBestseller && (
@@ -58,13 +45,18 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
               -{discountPercentage}%
             </Badge>
           )}
+          {product.isCustomizable && (
+            <Badge className="bg-purple-500 hover:bg-purple-500 text-white">
+              Personalisierbar
+            </Badge>
+          )}
         </div>
 
         {/* Stock Status */}
         {!product.inStock && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <Badge variant="destructive" className="text-lg px-4 py-2">
-              Out of Stock
+              Nicht verfügbar
             </Badge>
           </div>
         )}
@@ -105,11 +97,11 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           {/* Price */}
           <div className="flex items-center space-x-2">
             <span className="text-xl font-bold text-gray-900">
-              ${product.price.toFixed(2)}
+              {product.price.toFixed(2)}€
             </span>
             {product.originalPrice && (
               <span className="text-sm text-gray-500 line-through">
-                ${product.originalPrice.toFixed(2)}
+                {product.originalPrice.toFixed(2)}€
               </span>
             )}
           </div>
@@ -123,7 +115,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-gray-300"
         >
           <ShoppingCart className="w-4 h-4 mr-2" />
-          {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+          {product.inStock ? 'In den Warenkorb' : 'Nicht verfügbar'}
         </Button>
       </CardFooter>
     </Card>

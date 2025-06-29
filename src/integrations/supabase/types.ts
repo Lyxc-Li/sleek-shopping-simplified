@@ -9,7 +9,162 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          password_hash: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          password_hash: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          password_hash?: string
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          created_at: string
+          customization_data: Json | null
+          id: string
+          order_id: string
+          product_id: string
+          quantity: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          customization_data?: Json | null
+          id?: string
+          order_id: string
+          product_id: string
+          quantity?: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string
+          customization_data?: Json | null
+          id?: string
+          order_id?: string
+          product_id?: string
+          quantity?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          id: string
+          shipping_address: Json
+          status: string
+          total_amount: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          shipping_address: Json
+          status?: string
+          total_amount: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          shipping_address?: Json
+          status?: string
+          total_amount?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string
+          created_at: string
+          customization_fields: Json | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_customizable: boolean | null
+          price: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          customization_fields?: Json | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_customizable?: boolean | null
+          price: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          customization_fields?: Json | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_customizable?: boolean | null
+          price?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

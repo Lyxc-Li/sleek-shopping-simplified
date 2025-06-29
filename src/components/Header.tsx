@@ -23,12 +23,9 @@ const Header = ({ cartItemCount = 0, onSearchChange, onCategoryFilter }: HeaderP
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const categories = [
-    'Electronics',
-    'Clothing',
-    'Home & Garden',
-    'Sports',
-    'Beauty',
-    'Books'
+    'Boxen',
+    'Kissen', 
+    'Einladungen'
   ];
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,9 +41,9 @@ const Header = ({ cartItemCount = 0, onSearchChange, onCategoryFilter }: HeaderP
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
+              <span className="text-white font-bold text-sm">G</span>
             </div>
-            <span className="text-xl font-bold text-gray-900">ShopEase</span>
+            <span className="text-xl font-bold text-gray-900">GeschenkShop</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -54,7 +51,7 @@ const Header = ({ cartItemCount = 0, onSearchChange, onCategoryFilter }: HeaderP
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="text-gray-700 hover:text-teal-600">
-                  Categories
+                  Kategorien
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white border shadow-lg">
@@ -70,13 +67,13 @@ const Header = ({ cartItemCount = 0, onSearchChange, onCategoryFilter }: HeaderP
               </DropdownMenuContent>
             </DropdownMenu>
             <Link to="/products" className="text-gray-700 hover:text-teal-600 transition-colors">
-              Products
+              Produkte
             </Link>
             <Button variant="ghost" className="text-gray-700 hover:text-teal-600">
-              About
+              Über uns
             </Button>
             <Button variant="ghost" className="text-gray-700 hover:text-teal-600">
-              Contact
+              Kontakt
             </Button>
           </nav>
 
@@ -86,7 +83,7 @@ const Header = ({ cartItemCount = 0, onSearchChange, onCategoryFilter }: HeaderP
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Produkte suchen..."
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="pl-10 pr-4 bg-gray-50 border-gray-200 focus:border-teal-500 focus:bg-white"
@@ -129,7 +126,7 @@ const Header = ({ cartItemCount = 0, onSearchChange, onCategoryFilter }: HeaderP
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               type="text"
-              placeholder="Search products..."
+              placeholder="Produkte suchen..."
               value={searchQuery}
               onChange={handleSearchChange}
               className="pl-10 pr-4 bg-gray-50 border-gray-200 focus:border-teal-500"
@@ -142,10 +139,10 @@ const Header = ({ cartItemCount = 0, onSearchChange, onCategoryFilter }: HeaderP
           <div className="md:hidden border-t bg-white">
             <nav className="flex flex-col space-y-4 p-4">
               <Link to="/products" className="text-gray-700 hover:text-teal-600 transition-colors">
-                Products
+                Produkte
               </Link>
               <div className="border-l-2 border-teal-200 pl-4">
-                <p className="text-sm font-medium text-gray-600 mb-2">Categories</p>
+                <p className="text-sm font-medium text-gray-600 mb-2">Kategorien</p>
                 {categories.map((category) => (
                   <button
                     key={category}

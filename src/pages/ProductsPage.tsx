@@ -7,10 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
-import { sampleProducts } from '@/data/products';
-import { Product } from '@/components/ProductCard';
+import { useProducts } from '@/hooks/useProducts';
+import { Product } from '@/services/products';
 import { CartItem } from '@/components/Cart';
-import { Filter } from 'lucide-react';
+import { Filter, Loader2 } from 'lucide-react';
 
 interface ProductsPageProps {
   cartItems: CartItem[];
@@ -21,14 +21,16 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, 100]);
   const [showInStockOnly, setShowInStockOnly] = useState(false);
   const [sortBy, setSortBy] = useState('name');
 
-  const categories = Array.from(new Set(sampleProducts.map(p => p.category)));
+  const { data: products = [], isLoading, error } = useProducts();
+
+  const categories = ['Boxen', 'Kissen', 'Einladungen'];
 
   const filteredProducts = useMemo(() => {
-    let filtered = sampleProducts.filter(product => {
+    let filtered = products.filter(product => {
       // Search filter
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           product.category.toLowerCase().includes(searchQuery.toLowerCase());
@@ -66,7 +68,7 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
     });
 
     return filtered;
-  }, [searchQuery, selectedCategory, selectedCategories, priceRange, showInStockOnly, sortBy]);
+  }, [products, searchQuery, selectedCategory, selectedCategories, priceRange, showInStockOnly, sortBy]);
 
   const handleCategoryChange = (category: string, checked: boolean) => {
     if (checked) {
@@ -75,6 +77,61 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
       setSelectedCategories(prev => prev.filter(c => c !== category));
     }
   };
+
+  // Calculate max price for slider
+  const maxPrice = useMemo(() => {
+    if (products.length === 0) return 100;
+    return Math.ceil(Math.max(...products.map(p => p.price)) / 10) * 10;
+  }, [products]);
+
+  // Update price range when products load
+  React.useEffect(() => {
+    if (products.length > 0 && priceRange[1] === 100) {
+      setPriceRange([0, maxPrice]);
+    }
+  }, [products, maxPrice, priceRange]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header
+          cartItemCount={cartItems.length}
+          onSearchChange={setSearchQuery}
+          onCategoryFilter={setSelectedCategory}
+        />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-teal-600" />
+              <p className="text-gray-600">Produkte werden geladen...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header
+          cartItemCount={cartItems.length}
+          onSearchChange={setSearchQuery}
+          onCategoryFilter={setSelectedCategory}
+        />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <p className="text-red-600 mb-4">Fehler beim Laden der Produkte</p>
+              <Button onClick={() => window.location.reload()}>
+                Erneut versuchen
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -92,14 +149,14 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Filter className="h-5 w-5" />
-                  Filters
+                  Filter
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Active Filters */}
                 {(selectedCategory || selectedCategories.length > 0) && (
                   <div>
-                    <h4 className="font-medium mb-2">Active Filters</h4>
+                    <h4 className="font-medium mb-2">Aktive Filter</h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedCategory && (
                         <Badge 
@@ -126,7 +183,7 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
 
                 {/* Categories */}
                 <div>
-                  <h4 className="font-medium mb-3">Categories</h4>
+                  <h4 className="font-medium mb-3">Kategorien</h4>
                   <div className="space-y-2">
                     {categories.map(category => (
                       <div key={category} className="flex items-center space-x-2">
@@ -147,18 +204,18 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
 
                 {/* Price Range */}
                 <div>
-                  <h4 className="font-medium mb-3">Price Range</h4>
+                  <h4 className="font-medium mb-3">Preisbereich</h4>
                   <div className="space-y-3">
                     <Slider
                       value={priceRange}
                       onValueChange={setPriceRange}
-                      max={1000}
-                      step={10}
+                      max={maxPrice}
+                      step={1}
                       className="w-full"
                     />
                     <div className="flex justify-between text-sm text-gray-600">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
+                      <span>{priceRange[0]}€</span>
+                      <span>{priceRange[1]}€</span>
                     </div>
                   </div>
                 </div>
@@ -171,7 +228,7 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
                     onCheckedChange={(checked) => setShowInStockOnly(checked === true)}
                   />
                   <label htmlFor="inStock" className="text-sm cursor-pointer">
-                    In stock only
+                    Nur verfügbare Artikel
                   </label>
                 </div>
 
@@ -182,12 +239,12 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
                   onClick={() => {
                     setSelectedCategory('');
                     setSelectedCategories([]);
-                    setPriceRange([0, 1000]);
+                    setPriceRange([0, maxPrice]);
                     setShowInStockOnly(false);
                     setSearchQuery('');
                   }}
                 >
-                  Clear All Filters
+                  Alle Filter löschen
                 </Button>
               </CardContent>
             </Card>
@@ -198,20 +255,20 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
             {/* Sort and Results Header */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
               <p className="text-gray-600">
-                Showing {filteredProducts.length} of {sampleProducts.length} products
+                {filteredProducts.length} von {products.length} Produkten angezeigt
               </p>
               
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Sort by:</span>
+                <span className="text-sm text-gray-600">Sortieren nach:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                 >
                   <option value="name">Name</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
+                  <option value="price-low">Preis: Niedrig zu Hoch</option>
+                  <option value="price-high">Preis: Hoch zu Niedrig</option>
+                  <option value="rating">Bestbewertet</option>
                 </select>
               </div>
             </div>
