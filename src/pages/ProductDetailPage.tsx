@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { sampleProducts } from '@/data/products';
 import { CartItem } from '@/components/Cart';  
-import { Product } from '@/components/ProductCard';
+import { Product } from '@/services/products';
 import { Star, ShoppingCart, Heart, Share2, Truck, Shield, RefreshCw, ChevronLeft, Plus, Minus } from 'lucide-react';
 
 interface ProductDetailPageProps {

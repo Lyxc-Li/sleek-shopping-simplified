@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { sampleProducts } from '@/data/products';
-import { Product } from '@/components/ProductCard';
+import { Product } from '@/services/products';
 import { CartItem } from '@/components/Cart';
 import { Star, Shield, Truck, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';

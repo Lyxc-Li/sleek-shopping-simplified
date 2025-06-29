@@ -1,6 +1,7 @@
 
 import React from 'react';
-import ProductCard, { Product } from './ProductCard';
+import ProductCard from './ProductCard';
+import { Product } from '@/services/products';
 
 interface ProductGridProps {
   products: Product[];
@@ -11,7 +12,7 @@ const ProductGrid = ({ products, onAddToCart }: ProductGridProps) => {
   if (products.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+        <p className="text-gray-500 text-lg">Keine Produkte gefunden, die Ihren Kriterien entsprechen.</p>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 
-import { Product } from '@/components/ProductCard';
+import { Product } from '@/services/products';
 
 export const sampleProducts: Product[] = [
   {

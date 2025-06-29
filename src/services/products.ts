@@ -38,7 +38,7 @@ export const mapDatabaseProductToProduct = (dbProduct: DatabaseProduct): Product
     isBestseller: Math.random() > 0.7,
     description: dbProduct.description || '',
     isCustomizable: dbProduct.is_customizable || false,
-    customizationFields: dbProduct.customization_fields || []
+    customizationFields: Array.isArray(dbProduct.customization_fields) ? dbProduct.customization_fields : []
   };
 };
 
