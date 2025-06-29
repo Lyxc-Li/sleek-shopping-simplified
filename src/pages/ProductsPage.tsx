@@ -134,7 +134,7 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
                           id={category}
                           checked={selectedCategories.includes(category)}
                           onCheckedChange={(checked) => 
-                            handleCategoryChange(category, checked as boolean)
+                            handleCategoryChange(category, checked === true)
                           }
                         />
                         <label htmlFor={category} className="text-sm cursor-pointer">
@@ -168,7 +168,7 @@ const ProductsPage = ({ cartItems, onAddToCart }: ProductsPageProps) => {
                   <Checkbox
                     id="inStock"
                     checked={showInStockOnly}
-                    onCheckedChange={setShowInStockOnly}
+                    onCheckedChange={(checked) => setShowInStockOnly(checked === true)}
                   />
                   <label htmlFor="inStock" className="text-sm cursor-pointer">
                     In stock only
